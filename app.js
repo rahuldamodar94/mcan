@@ -3,22 +3,10 @@ const provider = new Web3.providers.HttpProvider('http://134.209.15.110:22000');
 const web3 = new Web3(provider);
 var Tx = require('ethereumjs-tx');
 
-const options = {useNewUrlParser: true, useCreateIndex: true};
-var express = require('express');
-var bodyParser = require('body-parser');
-const BigNumber = require('bignumber.js');
-var app = express();
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 
 
 
-app.post('/transfer', (req,res) => {
 
-
-let email = req.body.email;
-let coin = req.body.coin;
-let token = new BigNumber(parseFloat(coin)*(10**18)).toFixed();
 
 
 const contractAddress = '0xa4ceef94c7576197ebd9be150f5aa82482815d5b';
@@ -36,7 +24,7 @@ const privateKey = Buffer.from(privateKeys, 'hex');
 
 var accountDetails = web3.eth.accounts.create();
 
-let account2 = accountDetails.address;
+let account2 = '0xaE3D415FE5488C4426A956eC53F1EA45BA181Fe1';
 let privateKey2 = accountDetails.privateKey;
 
 
@@ -49,7 +37,7 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
     nonce:    web3.utils.toHex(txCount),
     gas: web3.utils.toHex(4000000), 
     to: contractAddress,
-    data: contractInstance.methods.transfer(account2, token).encodeABI()
+    data: contractInstance.methods.transfer(account2, 0).encodeABI()
   }
 
   const tx = new Tx(txObject)
@@ -65,21 +53,18 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
 	
         var transactionHash = result.logs[0].transactionHash;
      
-        res.json({status:200 ,message: 'Transfered',doc: transactionHash});
+        console.log(transactionHash);
     }).catch((err) => {
-        return res.json({status:400, message: 'Transfer Failed'});
+        console.log(err);
 });
 
   
 });
 
-});
 
 
 
-app.listen(3000, () => {
-	console.log("Server running on port 3000");
-});
+
 
 
 
