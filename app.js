@@ -2,7 +2,7 @@ const Web3 = require('web3');
 const provider = new Web3.providers.HttpProvider('http://134.209.15.110:22000');
 const web3 = new Web3(provider);
 var Tx = require('ethereumjs-tx');
-const mongoose = require('mongoose');
+
 const options = {useNewUrlParser: true, useCreateIndex: true};
 var express = require('express');
 var bodyParser = require('body-parser');
@@ -11,9 +11,6 @@ var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-mongoose.connect('mongodb://localhost:27017/mcan', options);
-
-var Details = require('./details.js');
 
 
 app.post('/transfer', (req,res) => {
@@ -65,19 +62,12 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
 .on('receipt', (result) => {
 	
 	
-	let details = new Details({
-        email: email,
-        coin: coin,
-        account: account2,
-        transactionHash:result.logs[0].transactionHash,
-        privateKey: privateKey2      
-    });
-
-    details.save().then((doc) => {
-        return res.json({status:200 ,message: 'Transfered',doc: doc});
+	
+        var transactionHash = result.logs[0].transactionHash;
+     
+        res.json({status:200 ,message: 'Transfered',doc: transactionHash});
     }).catch((err) => {
         return res.json({status:400, message: 'Transfer Failed'});
-    });
 });
 
   
@@ -85,16 +75,6 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
 
 });
 
-
-app.get('/getDetails', (req,res) => { 
-
-	var address = req.query.account;
-	Details.find({account:address}).then((result)=> {
-		return res.json({status: 200, result: result});
-	}).catch((err) => {
-		return res.json({status:400, message: "Details cant be fetched from the database"});
-	});
-});
 
 
 app.listen(3000, () => {
