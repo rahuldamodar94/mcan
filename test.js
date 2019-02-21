@@ -38,15 +38,17 @@ var promise = new Promise((resolve,reject)=>{
 
     const serializedTx = tx.serialize()
     const raw = '0x' + serializedTx.toString('hex');
+    debugger;
     resolve(raw);
     });
 
     return promise;
 
 }).then((raw) => {
+  debugger;
       web3.eth.sendSignedTransaction(raw)
             .on('receipt', (result) => {
-
+              debugger;
                 var transactionHash = result.logs[0].transactionHash;
 
                 console.log(transactionHash);
