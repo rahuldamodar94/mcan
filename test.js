@@ -24,6 +24,7 @@ let privateKey2 = accountDetails.privateKey;
 
 
 web3.eth.getTransactionCount(account).then((txCount)=> {
+var promise = new Promise((resolve,reject)=>{
   const txObject = {
         from: account,
         nonce: web3.utils.toHex(txCount),
@@ -36,10 +37,12 @@ web3.eth.getTransactionCount(account).then((txCount)=> {
     tx.sign(privateKey)
 
     const serializedTx = tx.serialize()
-    const raw = '0x' + serializedTx.toString('hex')
-    
+    const raw = '0x' + serializedTx.toString('hex');
+    resolve(raw);
+    });
 
-    return raw;
+    return promise;
+
 }).then((raw) => {
       web3.eth.sendSignedTransaction(raw)
             .on('receipt', (result) => {
