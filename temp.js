@@ -43,8 +43,20 @@ const contractInstance = new web3.eth.Contract(contractAbi, contractAddress);
 //   });
 
 
+var getTransaction = function(raw){
+	web3.eth.sendSignedTransaction(raw)
+            .on('receipt', (result) => {
+              debugger;
+                var transactionHash = result.logs[0].transactionHash;
+
+                console.log(transactionHash);
+            }).catch((err) => {
+                console.log(err);
+            });
+}
 
 
+module.exports = getTransaction;
 
 
 
