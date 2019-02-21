@@ -1,12 +1,10 @@
 
-
+var fs = require('fs');
 
 const Web3 = require('web3');
 const provider = new Web3.providers.HttpProvider('http://134.209.15.110:22000');
 const web3 = new Web3(provider);
 
-var raw = process.argv[2];
-console.log(raw);
 
 // const receipt = web3.eth.getTransactionReceipt('0x9a7576cf536c4b934342358303da1fdb26936051cf5c8b2964343b1cf5aad318')
 // .then((res) => {
@@ -25,8 +23,11 @@ const contractInstance = new web3.eth.Contract(contractAbi, contractAddress);
 // 	console.log(result);
 // });
 
+fs.readFile('raw.txt', function(err, data) {
+	if (err) throw err;
+    var raw = data.toString();
 
-web3.eth.sendSignedTransaction(raw)
+    web3.eth.sendSignedTransaction(raw)
 .on('receipt', (result) => {
 	
 	
@@ -37,6 +38,10 @@ web3.eth.sendSignedTransaction(raw)
     }).catch((err) => {
         console.log(err);
 });
+  });
+
+
+
 
 
 
