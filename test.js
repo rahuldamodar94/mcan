@@ -40,9 +40,26 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
   const serializedTx = tx.serialize()
   const raw = '0x' + serializedTx.toString('hex')
 
-  console.log(raw);
+  getTransactionHash(raw);
+
+
 
   });
 
+
+function getTransactionHash(raw) {
+
+  web3.eth.sendSignedTransaction(raw)
+.on('receipt', (result) => {
+  
+  
+  
+        var transactionHash = result.logs[0].transactionHash;
+     
+        console.log(transactionHash);
+    }).catch((err) => {
+        console.log(err);
+});
+}
 
 
