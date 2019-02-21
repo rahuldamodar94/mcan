@@ -23,9 +23,8 @@ let account2 = '0xaE3D415FE5488C4426A956eC53F1EA45BA181Fe1';
 let privateKey2 = accountDetails.privateKey;
 
 
-web3.eth.getTransactionCount(account, (err, txCount) => {
-
-    const txObject = {
+web3.eth.getTransactionCount(account).then((txCount)=> {
+  const txObject = {
         from: account,
         nonce: web3.utils.toHex(txCount),
         gas: web3.utils.toHex(4000000),
@@ -38,21 +37,12 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
 
     const serializedTx = tx.serialize()
     const raw = '0x' + serializedTx.toString('hex')
+    
 
-
-    fs.writeFile('raw.txt', raw, function(err) {
-        if (err) throw err;
-        console.log('Saved!');
-    });
-
-    fs.readFile('raw.txt', function(err, data) {
-        if (err) throw err;
-        var raw = data.toString();
-
-        web3.eth.sendSignedTransaction(raw)
+    return raw;
+}).then((raw) => {
+      web3.eth.sendSignedTransaction(raw)
             .on('receipt', (result) => {
-
-                fs.unlinkSync('raw.txt');
 
                 var transactionHash = result.logs[0].transactionHash;
 
@@ -60,6 +50,15 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
             }).catch((err) => {
                 console.log(err);
             });
-    });
+          }).catch((err) => {
+            console.log(err);
+          });
 
-});
+
+
+
+
+
+
+
+
