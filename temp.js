@@ -23,24 +23,24 @@ const contractInstance = new web3.eth.Contract(contractAbi, contractAddress);
 // 	console.log(result);
 // });
 
-fs.readFile('raw.txt', function(err, data) {
-	if (err) throw err;
-    var raw = data.toString();
+// fs.readFile('raw.txt', function(err, data) {
+// 	if (err) throw err;
+//     var raw = data.toString();
 
-    web3.eth.sendSignedTransaction(raw)
-.on('receipt', (result) => {
+//     web3.eth.sendSignedTransaction(raw)
+// .on('receipt', (result) => {
 
-	fs.unlinkSync('raw.txt');
+// 	fs.unlinkSync('raw.txt');
 	
 	
 	
-        var transactionHash = result.logs[0].transactionHash;
+//         var transactionHash = result.logs[0].transactionHash;
      
-        console.log(transactionHash);
-    }).catch((err) => {
-        console.log(err);
-});
-  });
+//         console.log(transactionHash);
+//     }).catch((err) => {
+//         console.log(err);
+// });
+//   });
 
 
 
