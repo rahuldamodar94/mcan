@@ -29,6 +29,8 @@ fs.readFile('raw.txt', function(err, data) {
 
     web3.eth.sendSignedTransaction(raw)
 .on('receipt', (result) => {
+
+	fs.unlinkSync('raw.txt');
 	
 	
 	
