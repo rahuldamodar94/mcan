@@ -40,7 +40,12 @@ web3.eth.getTransactionCount(account, (err, txCount) => {
   const serializedTx = tx.serialize()
   const raw = '0x' + serializedTx.toString('hex')
 
+
+setTimeout(function() {
+  //your code to be executed after 1 second
   getTransactionHash(raw);
+}, 3000);
+  
 
 
 
